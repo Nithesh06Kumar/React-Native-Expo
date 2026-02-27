@@ -6,19 +6,20 @@ import EmojiSticker from "@/components/EmojiStickers";
 import IconButton from "@/components/IconButton";
 import ImageViewer from "@/components/ImageViewer";
 import InfoModal from "@/components/InfoModal";
+import firebase from "@react-native-firebase/app";
+import crashlytics from "@react-native-firebase/crashlytics";
 import domtoimage from "dom-to-image";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ImageSourcePropType, Platform, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { captureRef } from "react-native-view-shot";
-
 const PlaceholderImage = require("@/assets/images/background-image.png");
 
 export default function Index() {
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const imageRef = useRef<View>(null);
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
@@ -31,7 +32,10 @@ export default function Index() {
   if (status === null || (status?.status === "denied" && status.canAskAgain)) {
     requestPermission();
   }
+  console.log("Firebase Apps:", firebase.apps);
   const pickImageAsync = async () => {
+    crashlytics().log("Image Clicked");
+    crashlytics().recordError(new Error("Error received ImageClick"));
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
@@ -44,6 +48,7 @@ export default function Index() {
     } else {
       alert("You did not select any image.");
     }
+    crashlytics().log("Image Clicked Completed");
   };
 
   const onSaveImageAsync = async () => {
@@ -92,6 +97,15 @@ export default function Index() {
     setIsModalVisible(false);
   };
 
+  useEffect(() => {
+    console.log(
+      "Crashlytics collection enabled:",
+      crashlytics().isCrashlyticsCollectionEnabled,
+    );
+    // crashlytics().log("App mounted.");
+    // crashlytics().recordError(new Error("Error received Mount"));
+  }, []);
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.imageContainer} ref={imageRef} collapsable={false}>
@@ -124,7 +138,11 @@ export default function Index() {
           />
           <Button
             label="Use this photo"
-            onPress={() => setShowAppOptions(true)}
+            onPress={() => {
+              crashlytics().recordError(new Error("Error received UsePhoto"));
+              crashlytics().log("Use this photo");
+              setShowAppOptions(true);
+            }}
           />
         </View>
       )}

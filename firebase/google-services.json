@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "394501372794",
+    "project_id": "crashlytictest-ab1f3",
+    "storage_bucket": "crashlytictest-ab1f3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394501372794:android:5042a0d61a06d5835d34c3",
+        "android_client_info": {
+          "package_name": "com.nithesh.smash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQqTgGnPL247bYgl79H399fHa77NG6TnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
